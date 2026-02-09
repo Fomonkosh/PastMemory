@@ -21,13 +21,13 @@
                      <children>
                         <BorderPane layoutX="29.0" layoutY="31.0" prefHeight="52.0" prefWidth="544.0" AnchorPane.topAnchor="30.0">
                            <center>
-                              <ComboBox fx:id="cbCategory" editable="true" prefWidth="150.0" promptText="cbCategory" BorderPane.alignment="CENTER" />
+                              <ComboBox fx:id="cbCategory" editable="true" prefWidth="150.0" promptText="Category" BorderPane.alignment="CENTER" />
                            </center>
                            <left>
-                              <TextField fx:id="tfUrl" prefHeight="31.0" prefWidth="239.0" promptText="tfUrl" BorderPane.alignment="CENTER" />
+                              <TextField fx:id="tfUrl" prefHeight="31.0" prefWidth="239.0" promptText="Url" BorderPane.alignment="CENTER" />
                            </left>
                            <right>
-                              <TextField fx:id="tfDesc" promptText="tfDesc" BorderPane.alignment="CENTER" />
+                              <TextField fx:id="tfDesc" promptText="Desc" BorderPane.alignment="CENTER" />
                            </right>
                            <bottom>
                               <Button mnemonicParsing="false" onAction="#onAdd" prefHeight="31.0" prefWidth="84.0" text="ADD" BorderPane.alignment="CENTER" />
@@ -45,9 +45,9 @@
                            <bottom>
                               <TableView fx:id="tableResults" prefHeight="300.0" prefWidth="540.0" BorderPane.alignment="TOP_CENTER">
                                 <columns>
-                                  <TableColumn fx:id="colUrl" prefWidth="200.0" text="colUrl" />
-                                  <TableColumn fx:id="colCategory" prefWidth="96.0" text="colCategory" />
-                                    <TableColumn fx:id="colDesc" prefWidth="303.0" text="colDesc" />
+                                  <TableColumn fx:id="colUrl" prefWidth="200.0" text="Url" />
+                                  <TableColumn fx:id="colCategory" prefWidth="96.0" text="Category" />
+                                    <TableColumn fx:id="colDesc" prefWidth="303.0" text="Desc" />
                                 </columns>
                               </TableView>
                            </bottom>
@@ -55,10 +55,10 @@
                               <Button mnemonicParsing="false" onAction="#onSearch" text="Search" BorderPane.alignment="TOP_RIGHT" />
                            </right>
                            <center>
-                              <TextField fx:id="tfDescS" maxHeight="0.0" prefHeight="31.0" prefWidth="274.0" promptText="tfDescS Not yet" BorderPane.alignment="TOP_CENTER" />
+                              <TextField fx:id="tfDescS" maxHeight="0.0" prefHeight="31.0" prefWidth="274.0" promptText="Desc" BorderPane.alignment="TOP_CENTER" />
                            </center>
                            <left>
-                              <ComboBox fx:id="cbSearchCategory" prefWidth="150.0" promptText="cbCategoryS" BorderPane.alignment="TOP_LEFT" />
+                              <ComboBox fx:id="cbSearchCategory" prefWidth="150.0" promptText="Category" BorderPane.alignment="TOP_LEFT" />
                            </left>
                         </BorderPane>
                      </children>
