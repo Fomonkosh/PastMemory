@@ -12,7 +12,7 @@ Past Memory helps you **store these links with categories and short descriptions
 ### Input – Add new links
 On the **Input** tab, you can:
 
-<img width="596" height="398" alt="{31531EF4-4F0B-4069-B65D-B8509F773FDA}" src="https://github.com/user-attachments/assets/69228cc7-9206-4170-aaaa-0c2d7045b1a1" />
+
 
 
 - Paste a URL
@@ -27,7 +27,7 @@ Categories are created dynamically and reused automatically.
 ### Search – Find saved links
 On the **Search** tab, you can:
 
-<img width="598" height="392" alt="{4862842E-7C85-4E16-891D-D58DF6B1BBAA}" src="https://github.com/user-attachments/assets/75db8157-a43e-4040-9b0e-f2bc567eb596" />
+
 
 
 - Search links by **category**
