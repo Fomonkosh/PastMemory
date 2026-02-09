@@ -67,6 +67,10 @@ public class FXMLDocumentController implements Initializable {
 
         ensureStorage();
         loadCategories();
+        
+        if (!categories.contains("")) {
+    categories.add(0, "");
+}
 
         colUrl.setCellValueFactory(new PropertyValueFactory<>("url"));
         colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
@@ -193,38 +197,59 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void onSearch(ActionEvent e) {
-        String cat = cbSearchCategory.getValue();
-        if (cat == null || cat.isBlank()) {
-            showError("Select a category to search.");
-            return;
-        }
+private void onSearch(ActionEvent e) {
 
-        results.clear();
+    String selectedCategory = cbSearchCategory.getValue();
+    String descQuery = tfDescS.getText().trim().toLowerCase();
 
-        try {
-            List<String> lines = Files.readAllLines(linksFile, StandardCharsets.UTF_8);
-            for (String line : lines) {
-                String cleaned = line.trim();
-                if (cleaned.isBlank() || cleaned.toLowerCase().startsWith("url;")) {
-                    continue; // skip the header
-                }
-                String[] parts = line.split(";", -1); // -1 so that empty fields are not lost
-                if (parts.length < 3) {
-                    continue;
-                }
+    boolean hasCategory = selectedCategory != null && !selectedCategory.isBlank();
+    boolean hasDesc = !descQuery.isBlank();
 
-                String url = parts[0].trim();
-                String category = parts[1].trim();
-                String desc = parts[2].trim();
-
-                if (category.equalsIgnoreCase(cat.trim())) {
-                    results.add(new LinkItem(url, category, desc));
-                }
-            }
-        } catch (IOException ex) {
-            showError("Failed to read links.csv: " + ex.getMessage());
-        }
+    if (!hasCategory && !hasDesc) {
+        showError("Select a category or enter text to search.");
+        return;
     }
+
+    results.clear();
+
+    try {
+        List<String> lines = Files.readAllLines(linksFile, StandardCharsets.UTF_8);
+
+        for (String line : lines) {
+            if (line.isBlank()) continue;
+
+            String cleanLine = line.trim();
+            if (cleanLine.toLowerCase().startsWith("url;")) continue;
+
+            String[] parts = cleanLine.split(";", -1);
+            if (parts.length < 3) continue;
+
+            String url = parts[0].trim();
+            String category = parts[1].trim();
+            String desc = parts[2].trim();
+
+            boolean matchCategory = true;
+            boolean matchDesc = true;
+
+            // filter by category (if selected)
+            if (hasCategory) {
+                matchCategory = category.equalsIgnoreCase(selectedCategory.trim());
+            }
+
+            // filter by description (if text is entered)
+            if (hasDesc) {
+                matchDesc = desc.toLowerCase().contains(descQuery);
+            }
+
+            // add if ALL conditions are met
+            if (matchCategory && matchDesc) {
+                results.add(new LinkItem(url, category, desc));
+            }
+        }
+
+    } catch (IOException ex) {
+        showError("Error reading file: " + ex.getMessage());
+    }
+}
 
 }
