@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="pastmemory2.FXMLDocumentController">
+   <children>
+      <TextField fx:id="tfUrl" layoutX="14.0" layoutY="45.0" promptText="tfUrl" />
+      <TextField fx:id="tfDesc" layoutX="351.0" layoutY="45.0" promptText="tfDesc" />
+      <ComboBox fx:id="cbCategory" editable="true" layoutX="201.0" layoutY="45.0" prefWidth="150.0" promptText="cbCategory" />
+      <Button layoutX="235.0" layoutY="91.0" mnemonicParsing="false" onAction="#onAdd" text="ADD" />
+   </children>
+</AnchorPane>
