@@ -1,4 +1,4 @@
-package pastmemory2;
+package pastmemory;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class PastMemory2 extends Application {
+public class PastMemory extends Application {
 @Override
     public void start(Stage primaryStage) throws Exception{
     
