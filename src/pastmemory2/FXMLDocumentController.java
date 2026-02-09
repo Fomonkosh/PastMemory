@@ -37,10 +37,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private ComboBox<String> cbCategory;
 
-   
-     private final ObservableList<String> categories = FXCollections.observableArrayList();
+    private final ObservableList<String> categories = FXCollections.observableArrayList();
 
-   // storage folder and files
+    // storage folder and files
     private final Path appDir = Paths.get(System.getProperty("user.home"), ".past-memory");
     private final Path categoriesFile = appDir.resolve("categories.txt");
     private final Path linksFile = appDir.resolve("links.csv");
@@ -48,15 +47,15 @@ public class FXMLDocumentController implements Initializable {
     private TextField tfDescS;
     @FXML
     private TableView<LinkItem> tableResults;
-    
+
     private final ObservableList<LinkItem> results = FXCollections.observableArrayList();
-    
-    @FXML 
+
+    @FXML
     private TableColumn<LinkItem, String> colUrl;
-@FXML 
-private TableColumn<LinkItem, String> colCategory;
-@FXML 
-private TableColumn<LinkItem, String> colDesc;
+    @FXML
+    private TableColumn<LinkItem, String> colCategory;
+    @FXML
+    private TableColumn<LinkItem, String> colDesc;
     @FXML
     private ComboBox<String> cbSearchCategory;
 
@@ -68,16 +67,16 @@ private TableColumn<LinkItem, String> colDesc;
 
         ensureStorage();
         loadCategories();
-        
+
         colUrl.setCellValueFactory(new PropertyValueFactory<>("url"));
-colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
-colDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
+        colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
+        colDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
     }
 
     @FXML
     private void onAdd(ActionEvent event) {
         String link = tfUrl.getText().trim();
-        String cat  = cbCategory.getEditor().getText().trim();   // important for editable ComboBox
+        String cat = cbCategory.getEditor().getText().trim();   // important for editable ComboBox
         String desc = tfDesc.getText().trim();                   // may be empty, I need to remember to clean the table
 
         if (link.isEmpty() || cat.isEmpty()) {
@@ -102,11 +101,12 @@ colDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
     }
 
     // ---------- storage helpers ----------
-
     private void ensureStorage() {
         try {
             Files.createDirectories(appDir);
-            if (!Files.exists(categoriesFile)) Files.createFile(categoriesFile);
+            if (!Files.exists(categoriesFile)) {
+                Files.createFile(categoriesFile);
+            }
             if (!Files.exists(linksFile)) {
                 Files.createFile(linksFile);
                 // заголовок (необязательно, но удобно)
@@ -141,8 +141,8 @@ colDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
 
     private void appendLink(String url, String cat, String desc) {
         // simple escape of the separator ; and line breaks, preparation for the table
-        String safeUrl  = escape(url);
-        String safeCat  = escape(cat);
+        String safeUrl = escape(url);
+        String safeCat = escape(cat);
         String safeDesc = escape(desc);
 
         String row = safeUrl + " ; " + safeCat + " ; " + safeDesc + "\n";
@@ -166,54 +166,65 @@ colDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
         alert.setContentText(msg);
         alert.showAndWait();
     }
-    
+
     public class LinkItem {
-    private final String url;
-    private final String category;
-    private final String description;
 
-    public LinkItem(String url, String category, String description) {
-        this.url = url;
-        this.category = category;
-        this.description = description;
-    }
+        private final String url;
+        private final String category;
+        private final String description;
 
-    public String getUrl() { return url; }
-    public String getCategory() { return category; }
-    public String getDescription() { return description; }
-}
-    
-    @FXML
-private void onSearch(ActionEvent e) {
-    String cat = cbSearchCategory.getValue();
-    if (cat == null || cat.isBlank()) {
-        showError("Select a category to search.");
-        return;
-    }
-
-    results.clear();
-
-    try {
-        List<String> lines = Files.readAllLines(linksFile, StandardCharsets.UTF_8);
-        for (String line : lines) {
-            String cleaned = line.trim();
-if (cleaned.isBlank() || cleaned.toLowerCase().startsWith("url;")) continue; // skip the header
-
-            String[] parts = line.split(";", -1); // -1 so that empty fields are not lost
-            if (parts.length < 3) continue;
-
-            String url = parts[0].trim();
-            String category = parts[1].trim();
-            String desc = parts[2].trim();
-
-            if (category.equalsIgnoreCase(cat.trim())) {
-                results.add(new LinkItem(url, category, desc));
-            }
+        public LinkItem(String url, String category, String description) {
+            this.url = url;
+            this.category = category;
+            this.description = description;
         }
-    } catch (IOException ex) {
-        showError("Failed to read links.csv: " + ex.getMessage());
+
+        public String getUrl() {
+            return url;
+        }
+
+        public String getCategory() {
+            return category;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
-}
-    
-    
+
+    @FXML
+    private void onSearch(ActionEvent e) {
+        String cat = cbSearchCategory.getValue();
+        if (cat == null || cat.isBlank()) {
+            showError("Select a category to search.");
+            return;
+        }
+
+        results.clear();
+
+        try {
+            List<String> lines = Files.readAllLines(linksFile, StandardCharsets.UTF_8);
+            for (String line : lines) {
+                String cleaned = line.trim();
+                if (cleaned.isBlank() || cleaned.toLowerCase().startsWith("url;")) {
+                    continue; // skip the header
+                }
+                String[] parts = line.split(";", -1); // -1 so that empty fields are not lost
+                if (parts.length < 3) {
+                    continue;
+                }
+
+                String url = parts[0].trim();
+                String category = parts[1].trim();
+                String desc = parts[2].trim();
+
+                if (category.equalsIgnoreCase(cat.trim())) {
+                    results.add(new LinkItem(url, category, desc));
+                }
+            }
+        } catch (IOException ex) {
+            showError("Failed to read links.csv: " + ex.getMessage());
+        }
+    }
+
 }
