@@ -155,7 +155,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private String escape(String s) {
-        // replace ; with a comma (you can do it differently)
+        // replace ; with a comma-
         return s.replace(";", ",").replace("\n", " ").replace("\r", " ").trim();
     }
 
