@@ -81,16 +81,6 @@ This project was created to:
 
 ---
 
-## Screenshots
-
-### Input tab
-_Add links with categories and optional descriptions._
-
-### Search tab
-_Search stored links by category or description._
-
----
-
 ## Future Improvements
 
 Possible future extensions include:
