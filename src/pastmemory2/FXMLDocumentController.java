@@ -19,6 +19,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  * FXML Controller class
@@ -41,13 +44,34 @@ public class FXMLDocumentController implements Initializable {
     private final Path appDir = Paths.get(System.getProperty("user.home"), ".past-memory");
     private final Path categoriesFile = appDir.resolve("categories.txt");
     private final Path linksFile = appDir.resolve("links.csv");
+    @FXML
+    private TextField tfDescS;
+    @FXML
+    private TableView<LinkItem> tableResults;
+    
+    private final ObservableList<LinkItem> results = FXCollections.observableArrayList();
+    
+    @FXML 
+    private TableColumn<LinkItem, String> colUrl;
+@FXML 
+private TableColumn<LinkItem, String> colCategory;
+@FXML 
+private TableColumn<LinkItem, String> colDesc;
+    @FXML
+    private ComboBox<String> cbSearchCategory;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cbCategory.setItems(categories);
+        cbSearchCategory.setItems(categories);
+        tableResults.setItems(results);
 
         ensureStorage();
         loadCategories();
+        
+        colUrl.setCellValueFactory(new PropertyValueFactory<>("url"));
+colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
+colDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
     }
 
     @FXML
@@ -142,5 +166,54 @@ public class FXMLDocumentController implements Initializable {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+    
+    public class LinkItem {
+    private final String url;
+    private final String category;
+    private final String description;
+
+    public LinkItem(String url, String category, String description) {
+        this.url = url;
+        this.category = category;
+        this.description = description;
+    }
+
+    public String getUrl() { return url; }
+    public String getCategory() { return category; }
+    public String getDescription() { return description; }
+}
+    
+    @FXML
+private void onSearch(ActionEvent e) {
+    String cat = cbSearchCategory.getValue();
+    if (cat == null || cat.isBlank()) {
+        showError("Select a category to search.");
+        return;
+    }
+
+    results.clear();
+
+    try {
+        List<String> lines = Files.readAllLines(linksFile, StandardCharsets.UTF_8);
+        for (String line : lines) {
+            String cleaned = line.trim();
+if (cleaned.isBlank() || cleaned.toLowerCase().startsWith("url;")) continue; // skip the header
+
+            String[] parts = line.split(";", -1); // -1 so that empty fields are not lost
+            if (parts.length < 3) continue;
+
+            String url = parts[0].trim();
+            String category = parts[1].trim();
+            String desc = parts[2].trim();
+
+            if (category.equalsIgnoreCase(cat.trim())) {
+                results.add(new LinkItem(url, category, desc));
+            }
+        }
+    } catch (IOException ex) {
+        showError("Failed to read links.csv: " + ex.getMessage());
+    }
+}
+    
     
 }
